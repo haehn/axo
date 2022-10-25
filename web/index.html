@@ -25,7 +25,9 @@
         var viewer = OpenSeadragon({
           id: "viewer",
           prefixUrl: "https://openseadragon.github.io/openseadragon/images/",
-          tileSources: "axo.dzi"
+          tileSources: ["W255B_0.dzi", "W255B_1.dzi", "W255B_2.dzi"],
+          sequenceMode: true,
+
         });
 
       };
