@@ -506,7 +506,7 @@
             return value * 1000000000 + " n" + unitSuffix;
         }
         if (value < 0.001) {
-            return value * 1000000 + " μ" + unitSuffix;
+            return value * 1000000 + " u" + unitSuffix;
         }
         if (value < 1) {
             return value * 1000 + " m" + unitSuffix;
