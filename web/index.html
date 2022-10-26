@@ -18,6 +18,19 @@
         width:  100%;
         height:  100%;
       }
+
+      #info {
+        position: absolute;
+        z-index:  1000;
+        top: 50px;
+        left: 10px;
+        background-color: rgba(0,0,0,0.7);
+        min-height: 100px;
+        width:  200px;
+        color:  white;
+        font-family:  sans-serif;
+        font-size: .9em;
+      }
     </style>
 
     <script>
@@ -53,7 +66,17 @@
         // viewer.initializeAnnotations()
 
 
+        FIRSTPOINT = null;
+        SECONDPOINT = null;
+
+        info = document.getElementById('info');
+
         viewer.addHandler('canvas-click', function(event) {
+
+          if (!event.originalEvent.ctrlKey) {
+            return;
+          }
+
           // The canvas-click event gives us a position in web coordinates.
           var webPoint = event.position;
 
@@ -64,7 +87,26 @@
           var imagePoint = viewer.viewport.viewportToImageCoordinates(viewportPoint);
 
           // Show the results.
-          console.log(webPoint.toString(), viewportPoint.toString(), imagePoint.toString());
+          // console.log(webPoint.toString(), viewportPoint.toString(), imagePoint.toString());
+
+          if (!FIRSTPOINT) {
+            FIRSTPOINT = imagePoint;
+            SECONDPOINT = null;
+
+            info.innerHTML += 'P1 to';
+
+          } else if (!SECONDPOINT) {
+            SECONDPOINT = imagePoint;
+
+            MEASUREMENT = Math.sqrt(Math.pow(SECONDPOINT.x-FIRSTPOINT.x,2)+Math.pow(SECONDPOINT.y-FIRSTPOINT.y,2));
+
+            info.innerHTML += ' P2 = '+ (MEASUREMENT*PIXEL_SIZE*1e+6).toFixed(3) + ' um<br>';
+
+            // console.log(MEASUREMENT)
+
+            FIRSTPOINT = null;
+          }
+
 
         });
 
@@ -77,6 +119,8 @@
   <body>
 
     <div id='viewer'></div>
+
+    <div id='info'>MEASUREMENTS<br><br></div>
 
   </body>
 </html>
