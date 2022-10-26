@@ -1,7 +1,9 @@
 <html>
   <head>
 
-    <script src="https://cdn.jsdelivr.net/npm/openseadragon@3.1/build/openseadragon/openseadragon.min.js"></script>
+    <script src="js/openseadragon.min.js"></script>
+    <script src="js/openseadragon-scalebar.js"></script>
+    <script src="js/openseadragon-annotations.js"></script>
 
     <style>
       html, body { 
@@ -22,13 +24,32 @@
 
       window.onload = function() {
 
-        var viewer = OpenSeadragon({
+        viewer = OpenSeadragon({
           id: "viewer",
+          showNavigator: true,
           prefixUrl: "https://openseadragon.github.io/openseadragon/images/",
           tileSources: ["W255B_0.dzi", "W255B_1.dzi", "W255B_2.dzi"],
           sequenceMode: true,
 
         });
+
+        viewer.scalebar({
+            type: OpenSeadragon.ScalebarType.MICROSCOPY,
+            pixelsPerMeter: 1/1.0454e-5,
+            minWidth: "75px",
+            location: OpenSeadragon.ScalebarLocation.BOTTOM_RIGHT,
+            xOffset: 5,
+            yOffset: 10,
+            stayInsideImage: true,
+            color: "rgb(150, 150, 150)",
+            fontColor: "rgb(100, 100, 100)",
+            backgroundColor: "rgba(255, 255, 255, 0.5)",
+            fontSize: "small",
+            barThickness: 2
+        });
+
+        // viewer.initializeAnnotations()
+
 
       };
 
