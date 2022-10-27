@@ -1,126 +1,50 @@
 <html>
-  <head>
+<head>
+  <title>ERIKA'S AXO SCANS</title>
+  <style>
+    html,body {
+      font-family: sans-serif;
+    }
+    div {
+      float: left;
+      margin-left: 10px;
+    }
+  </style>
 
-    <script src="js/openseadragon.min.js"></script>
-    <script src="js/openseadragon-scalebar.js"></script>
-    <script src="js/openseadragon-annotations.js"></script>
+</head>
+<body>
 
-    <style>
-      html, body { 
-        background-color:#000;
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        overflow: hidden !important;  
-      }
+<div style='width:100%'>
+<h2>YOUNG SCANS</h2>
+<div><a href='viewer.html?W255B' target=_blank>W255B</a><br>
+<iframe src='viewer.html?W255B' style='width:250px'></iframe>
+</div>
+<div><a href='viewer.html?W324B' target=_blank>W324B</a><br>
+<iframe src='viewer.html?W324B' style='width:250px'></iframe>
+</div>
+<div><a href='viewer.html?W326B' target=_blank>W326B</a><br>
+<iframe src='viewer.html?W326B' style='width:250px'></iframe>
+</div>
+<div><a href='viewer.html?W340B' target=_blank>W340B</a><br>
+<iframe src='viewer.html?W340B' style='width:250px'></iframe>
+</div>
+<div><a href='viewer.html?W353B' target=_blank>W353B</a><br>
+<iframe src='viewer.html?W353B' style='width:250px'></iframe>
+</div>
+</div>
 
-      #oviewer {
-        width:  100%;
-        height:  100%;
-      }
+<div style='width:100%;margin-top:20px'>
+<h2>AGED SCANS</h2>
+<div><a href='viewer.html?W408B' target=_blank>W408B</a><br>
+<iframe src='viewer.html?W408B' style='width:250px'></iframe>
+</div>
+<div><a href='viewer.html?W409B' target=_blank>W409B</a><br>
+<iframe src='viewer.html?W409B' style='width:250px'></iframe>
+</div>
+<div><a href='viewer.html?W411B' target=_blank>W411B</a><br>
+<iframe src='viewer.html?W411B' style='width:250px'></iframe>
+</div>
+</div>
 
-      #info {
-        position: absolute;
-        z-index:  1000;
-        top: 50px;
-        left: 10px;
-        background-color: rgba(0,0,0,0.7);
-        min-height: 100px;
-        width:  200px;
-        color:  white;
-        font-family:  sans-serif;
-        font-size: .9em;
-      }
-    </style>
-
-    <script>
-
-      window.onload = function() {
-
-        PIXEL_SIZE = 4.54e-7;
-
-        viewer = OpenSeadragon({
-          id: "viewer",
-          showNavigator: true,
-          prefixUrl: "https://openseadragon.github.io/openseadragon/images/",
-          tileSources: ["W255B_0.dzi", "W255B_1.dzi", "W255B_2.dzi"],
-          sequenceMode: true,
-
-        });
-
-        viewer.scalebar({
-            type: OpenSeadragon.ScalebarType.MICROSCOPY,
-            pixelsPerMeter: 1/PIXEL_SIZE,
-            minWidth: "75px",
-            location: OpenSeadragon.ScalebarLocation.BOTTOM_RIGHT,
-            xOffset: 5,
-            yOffset: 10,
-            stayInsideImage: true,
-            color: "rgb(150, 150, 150)",
-            fontColor: "rgb(100, 100, 100)",
-            backgroundColor: "rgba(255, 255, 255, 0.5)",
-            fontSize: "small",
-            barThickness: 2
-        });
-
-        // viewer.initializeAnnotations()
-
-
-        FIRSTPOINT = null;
-        SECONDPOINT = null;
-
-        info = document.getElementById('info');
-
-        viewer.addHandler('canvas-click', function(event) {
-
-          if (!event.originalEvent.ctrlKey) {
-            return;
-          }
-
-          // The canvas-click event gives us a position in web coordinates.
-          var webPoint = event.position;
-
-          // Convert that to viewport coordinates, the lingua franca of OpenSeadragon coordinates.
-          var viewportPoint = viewer.viewport.pointFromPixel(webPoint);
-
-          // Convert from viewport coordinates to image coordinates.
-          var imagePoint = viewer.viewport.viewportToImageCoordinates(viewportPoint);
-
-          // Show the results.
-          // console.log(webPoint.toString(), viewportPoint.toString(), imagePoint.toString());
-
-          if (!FIRSTPOINT) {
-            FIRSTPOINT = imagePoint;
-            SECONDPOINT = null;
-
-            info.innerHTML += 'P1 to';
-
-          } else if (!SECONDPOINT) {
-            SECONDPOINT = imagePoint;
-
-            MEASUREMENT = Math.sqrt(Math.pow(SECONDPOINT.x-FIRSTPOINT.x,2)+Math.pow(SECONDPOINT.y-FIRSTPOINT.y,2));
-
-            info.innerHTML += ' P2 = '+ (MEASUREMENT*PIXEL_SIZE*1e+6).toFixed(3) + ' um<br>';
-
-            // console.log(MEASUREMENT)
-
-            FIRSTPOINT = null;
-          }
-
-
-        });
-
-      };
-
-    </script>
-
-  </head>
-
-  <body>
-
-    <div id='viewer'></div>
-
-    <div id='info'>MEASUREMENTS<br><br></div>
-
-  </body>
+</body>
 </html>
