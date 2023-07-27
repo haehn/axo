@@ -1,9 +1,34 @@
 <html>
   <head>
 
+    <link rel="stylesheet" href="style/grid.css">
+
+    <!-- library imports -->
     <script src="js/openseadragon.min.js"></script>
     <script src="js/openseadragon-scalebar.js"></script>
     <script src="js/openseadragon-annotations.js"></script>
+    <script src="js/openseadragon-annotorious.min.js"></script>
+    <script src="js/annotorious-shape-labels.min.js"></script>
+    <script src="js/fabricjs.min.js"></script>
+    <script src="js/openseadragon-fabricjs-overlay.js"></script>
+    <script src="js/dexie.min.js"></script>
+    <link rel="stylesheet" href="js/annotorious.min.css">
+
+    <!-- OSDMeasure classes -->
+    <script src="js/OSDMeasure/src/controllers/DexieWrapper.js"></script>
+    <script src="js/OSDMeasure/src/controllers/OSDMeasure.js"></script>
+    <script src="js/OSDMeasure/src/models/Measurement.js"></script>
+    <script src="js/OSDMeasure/src/models/Point.js"></script>
+    <script src="js/OSDMeasure/src/views/ButtonBar.js"></script>
+    <script src="js/OSDMeasure/src/views/MeasurementList.js"></script>
+    <script src="js/OSDMeasure/src/views/MeasurementListItem.js"></script>
+    <script src="js/OSDMeasure/src/views/Menu.js"></script>
+    <script src="js/OSDMeasure/src/views/MenuButton.js"></script>
+    <script src="js/OSDMeasure/src/views/UI.js"></script>
+
+    <script src="js/AnnotationHelper.js"></script>
+    <script src="js/GridViewerPlugin.js"></script>
+
 
     <style>
       html, body { 
@@ -19,28 +44,11 @@
         height:  100%;
       }
 
-      #info {
-        position: absolute;
-        z-index:  1000;
-        top: 50px;
-        left: 10px;
-        background-color: rgba(0,0,0,0.7);
-        min-height: 100px;
-        width:  200px;
-        color:  white;
-        font-family:  sans-serif;
-        font-size: .9em;
-        padding:  10px;
-      }
     </style>
 
     <script>
 
       window.onload = function() {
-
-        if (window.innerWidth <300) {
-          document.getElementById('info').style.display = 'none';
-        }
 
         PIXEL_SIZE = 4.54e-7;
 
@@ -87,55 +95,24 @@
             barThickness: 2
         });
 
-        // viewer.initializeAnnotations()
+        // Initialize the Grid plugin
+      let gridPlugin = new GridViewerPlugin(viewer, {
+        conversionFactor: 4.54e-7 * 1e3,
+        units: "mm",
+        useBuiltInUI: true
+      });
+      gridPlugin.addGrid();
 
+       // initialize the OSDMeasure plugin
+      let plugin = new OSDMeasure(viewer, {
+        conversionFactor: 4.54e-7 * 1e3,
+        units: "mm",
+        useBuiltInUI: true
+      });
 
-        FIRSTPOINT = null;
-        SECONDPOINT = null;
-
-        info = document.getElementById('info');
-
-        viewer.addHandler('canvas-click', function(event) {
-
-          if (!event.originalEvent.ctrlKey) {
-            return;
-          }
-
-          // The canvas-click event gives us a position in web coordinates.
-          var webPoint = event.position;
-
-          // Convert that to viewport coordinates, the lingua franca of OpenSeadragon coordinates.
-          var viewportPoint = viewer.viewport.pointFromPixel(webPoint);
-
-          // Convert from viewport coordinates to image coordinates.
-          var imagePoint = viewer.viewport.viewportToImageCoordinates(viewportPoint);
-
-          // Show the results.
-          // console.log(webPoint.toString(), viewportPoint.toString(), imagePoint.toString());
-
-          if (!FIRSTPOINT) {
-            FIRSTPOINT = imagePoint;
-            SECONDPOINT = null;
-
-            info.innerHTML += 'P1 to';
-
-          } else if (!SECONDPOINT) {
-            SECONDPOINT = imagePoint;
-
-            MEASUREMENT = Math.sqrt(Math.pow(SECONDPOINT.x-FIRSTPOINT.x,2)+Math.pow(SECONDPOINT.y-FIRSTPOINT.y,2));
-
-            info.innerHTML += ' P2 = '+ (MEASUREMENT*PIXEL_SIZE*1e+6).toFixed(3) + ' um<br>';
-
-            // console.log(MEASUREMENT)
-
-            FIRSTPOINT = null;
-          }
-
-
-        });
-
-      };
-
+      // setup annotations
+      let annotationHelper = new AnnotationHelper(viewer);
+      }
     </script>
 
   </head>
@@ -143,8 +120,6 @@
   <body>
 
     <div id='viewer'></div>
-
-    <div id='info'>MEASUREMENTS<br><br></div>
 
   </body>
 </html>
