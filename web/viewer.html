@@ -1,8 +1,6 @@
 <html>
   <head>
 
-    <link rel="stylesheet" href="style/grid.css">
-
     <!-- library imports -->
     <script src="js/openseadragon.min.js"></script>
     <script src="js/openseadragon-scalebar.js"></script>
@@ -13,21 +11,11 @@
     <script src="js/openseadragon-fabricjs-overlay.js"></script>
     <script src="js/dexie.min.js"></script>
     <link rel="stylesheet" href="js/annotorious.min.css">
-
-    <!-- OSDMeasure classes -->
-    <script src="js/OSDMeasure/src/controllers/DexieWrapper.js"></script>
-    <script src="js/OSDMeasure/src/controllers/OSDMeasure.js"></script>
-    <script src="js/OSDMeasure/src/models/Measurement.js"></script>
-    <script src="js/OSDMeasure/src/models/Point.js"></script>
-    <script src="js/OSDMeasure/src/views/ButtonBar.js"></script>
-    <script src="js/OSDMeasure/src/views/MeasurementList.js"></script>
-    <script src="js/OSDMeasure/src/views/MeasurementListItem.js"></script>
-    <script src="js/OSDMeasure/src/views/Menu.js"></script>
-    <script src="js/OSDMeasure/src/views/MenuButton.js"></script>
-    <script src="js/OSDMeasure/src/views/UI.js"></script>
-
     <script src="js/AnnotationHelper.js"></script>
-    <script src="js/GridViewerPlugin.js"></script>
+
+    <!--    OSD Measure and Grid-->
+    <script src="js/OSDMeasure.min.js"></script>
+    <script src="js/OSDGridPlugin.min.js"></script>
 
 
     <style>
@@ -101,7 +89,6 @@
         units: "mm",
         useBuiltInUI: true
       });
-      gridPlugin.addGrid();
 
        // initialize the OSDMeasure plugin
       let plugin = new OSDMeasure(viewer, {
